@@ -1,0 +1,37 @@
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
+// Color list
+$color-navy-blue:#34495e;
+$color-violet:#9b59b6;
+$color-blue:#3498db;
+$color-green:#62cb31;
+$color-yellow:#ffb606;
+$color-orange:#e67e22;
+$color-red:#e74c3c;
+$color-red-deep:#c0392b;
+
+// Additional colors
+$color-text: #797979;
+$color-bright: #f7f9fa;
+$color-background: #f1f3f6;
+$color-background-boxed: lighten($color-background, 3%);
+$border-color: #e4e5e7;
+
+// Additional variables
+$menu-width: 220px;
+$main-transition: all 0.1s ease-out 0s;
+
+// Fonts
+$font-family-sans-serif: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$text-color: $color-text;
+
+$headings-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$headings-font-weight: 600;
+
+// Border
+$border-radius-base: 0;
+$border-radius-large: 0;
+$border-radius-small: 0;
+
+// Default bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
