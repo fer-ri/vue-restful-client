@@ -10,13 +10,11 @@
         span.text-primary APP NAME
       .mobile-menu
         button.navbar-toggle.mobile-menu-toggle(type='button', data-toggle='collapse', data-target='#mobile-collapse')
-          i.fa.fa-chevron-down
+          i.ti-angle-down
         #mobile-collapse.collapse.mobile-navbar
           ul.nav.navbar-nav
             li
-              a(href='#') Link
-            li
-              a(href='#') Link
+              a(v-link="{ path: '/auth/logout' }") Logout
       .navbar-right
         ul.nav.navbar-nav
           li
@@ -76,10 +74,27 @@
 
       i
         font-size: 1.2em;
+
+  .mobile-navbar 
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 100;
+
+    .navbar-nav
+      padding: 0;
+      margin: 0;
+      border-bottom: 1px solid $border-color;
   
   @media (min-width: 768px)
     .navbar-right
       margin-right: 0;
+
+  @media (max-width: 768px)
+    .navbar-right
+      display: none;
 </style>
 
 <script>

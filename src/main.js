@@ -9,28 +9,31 @@ import { sync } from 'vuex-router-sync'
 import App from './App'
 import config from './config'
 import store from './vuex/store'
-import Auth from './http/jwt-auth'
-import routes from './http/routes'
-import middlewares from './http/middlewares'
-import interceptors from './http/interceptors'
+import http from './http'
+
+config.transition()
 
 Vue.use(VueHead)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
-Vue.http.interceptors.concat(interceptors)
+http.interceptors.forEach((item) => {
+  Vue.http.interceptors.push(item)
+})
+
 Vue.http.options.root = config.api.root
 
 var router = new VueRouter({
   linkActiveClass: 'active'
 })
 
-router.map(routes)
+router.map(http.routes)
 
-middlewares(router)
+http.middlewares(router)
 
 sync(store, router)
 
-Vue.use(Auth, config.api.auth, router)
+Vue.use(http.progress, config.progress, router)
+Vue.use(http.jwtAuth, config.api.auth, router)
 
 router.start(App, 'app')

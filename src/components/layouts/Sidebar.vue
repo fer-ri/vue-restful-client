@@ -16,29 +16,34 @@
           //-     li
           //-       a(href='#') Example link
       ul#side-menu.nav
+        li(v-link-active, v-for="item in menu")
+          a(v-link="item.link", v-on:click="fixDropdown")
+            | {{{ item.before }}}
+            span.nav-label {{ item.label }}
+            | {{{ item.after }}}
+            
+            i.arrow.fa.fa-angle-right(v-if="hasChildren(item)")
+
+          ul.nav.nav-second-level(v-if="hasChildren(item)")
+            li(v-for="child in item.children")
+              a(v-link="child.link") 
+                | {{{ child.before }}}
+                | {{ child.label }}
+                | {{{ child.after }}}
         li(v-link-active)
-          a(v-link="{ path: '/', exact: true }")
-            span.nav-label Dashboard
-            span.label.label-success.pull-right start
-        li(v-link-active)
-          a(v-link="{ path: '/hello' }")
+          a(v-link="{ path: '/hello' }", v-on:click="fixDropdown")
             span.nav-label Hello
-        li(v-link-active)
-          a(href='#')
-            span.nav-label Dropdown Menu
-            span.ti-angle-right
-          ul.nav.nav-second-level
-            li
-              a(href='#') Child menu
-            li
-              a(href='#') Child menu 2
 </template>
 
 <style lang="sass" scoped>
   @import "~assets/scss/bootstrap/variables";
 
+  body.page-small #menu,
   body.hide-sidebar #menu
     margin-left: -$menu-width;
+
+  body.page-small.show-sidebar #menu
+    margin-left: 0;
 
   #menu
     width: $menu-width;
@@ -77,7 +82,7 @@
         a
           color: $color-navy-blue;
 
-          .ti-angle-right
+          .arrow
             transform: rotate(90deg);
 
       &:hover a
@@ -86,11 +91,12 @@
       a
         color: $color-text;
         padding: 15px 20px;
+        cursor: pointer;
 
-        .ti-angle-right
+        .arrow
           position: absolute;
           right: 20px;
-          font-size: 0.8em;
+          font-size: 1.3em;
           line-height: 20px;
           transition: transform .15s;
 
@@ -113,13 +119,35 @@
 
 <script>
   import $ from 'jquery'
-  // import 'metismenu/dist/metisMenu'
+  import { menu } from '../../vuex/getters'
 
   export default {
     ready () {
       this.$nextTick(() => {
         $('#side-menu').metisMenu()
       })
+    },
+    methods: {
+      hasChildren (item) {
+        return Array.isArray(item.children) && item.children.length > 0
+      },
+      fixDropdown (event) {
+        let children = $(event.target)
+          .parents('li')
+          .siblings()
+          .children('ul.collapse.in')
+
+        children
+          .removeClass('in')
+          .attr('aria-expanded', false)
+          .parent('li')
+          .removeClass('active')
+      }
+    },
+    vuex: {
+      getters: {
+        menu
+      }
     }
   }
 </script>

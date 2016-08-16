@@ -1,9 +1,11 @@
-module.exports = function (router) {
+export default function (router) {
   router.beforeEach(function (transition) {
-    if (transition.to.auth) {
-      //
-    }
+    console.log('beforeEach')
 
     transition.next()
+  })
+
+  router.afterEach(() => {
+    console.log('afterEach')
   })
 }

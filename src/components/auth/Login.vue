@@ -5,11 +5,25 @@
     form(v-on:submit.prevent="onSubmit")
       .list-group
         .list-group-item
-          input.form-control.input-sm(type="text", placeholder="Email", v-model="credentials.email")
+          input.form-control.input-sm(
+            type="text", 
+            placeholder="Email", 
+            v-model="credentials.email",
+            :disabled="submitting"
+          )
         .list-group-item
-          input.form-control.input-sm(type="password", placeholder="Password", v-model="credentials.password")
+          input.form-control.input-sm(
+            type="password", 
+            placeholder="Password", 
+            v-model="credentials.password",
+            :disabled="submitting"
+          )
 
-      button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign in
+      button.btn.btn-lg.btn-primary.btn-block(
+        type="submit", 
+        :disabled="submitting",
+        v-text="submitting ? 'Loading ..' : 'Sign in'"
+      )
 
     .forgot-password
       a Forgot password?
@@ -50,11 +64,10 @@
 </style>
 
 <script>
-  import { login } from '../../vuex/actions'
-
   export default {
     data () {
       return {
+        submitting: false,
         credentials: {
           email: '',
           password: ''
@@ -63,12 +76,22 @@
     },
     methods: {
       onSubmit () {
+        let $this = this
+
+        this.submitting = true
+
         this.$auth.login(this.credentials, true, '/', {
-          success: function (user) {
-            this.login(user)
+          success (user) {
+            $this.submitting = false
+
+            $this.$dispatch('app:success', 'Welcome back')
           },
-          error: function () {
-            console.log('error')
+          error (error) {
+            $this.submitting = false
+
+            console.log(error)
+
+            $this.$dispatch('app:error', error)
           }
         })
       }
@@ -76,11 +99,6 @@
     head: {
       title: {
         inner: 'Sign in'
-      }
-    },
-    vuex: {
-      actions: {
-        login
       }
     }
   }

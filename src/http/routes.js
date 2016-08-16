@@ -16,6 +16,16 @@ import Register from '../components/auth/Register'
 import Hello from '../components/Hello'
 import Dashboard from '../components/Dashboard'
 
+// posts
+import PostIndex from '../components/posts/Index'
+import PostCreate from '../components/posts/Create'
+import PostEdit from '../components/posts/Edit'
+
+// users
+import UserIndex from '../components/users/Index'
+import UserCreate from '../components/users/Create'
+import UserEdit from '../components/users/Edit'
+
 module.exports = {
   '/': {
     auth: true,
@@ -26,6 +36,27 @@ module.exports = {
       },
       '/hello': {
         component: Hello
+      },
+      '/posts': {
+        component: PostIndex
+      },
+      '/posts/create': {
+        component: PostCreate
+      },
+      '/posts/:uuid/edit': {
+        component: PostEdit
+      },
+      '/users': {
+        auth: 'admin',
+        component: UserIndex
+      },
+      '/users/create': {
+        auth: 'admin',
+        component: UserCreate
+      },
+      '/users/:uuid/edit': {
+        auth: 'admin',
+        component: UserEdit
       }
     }
   },

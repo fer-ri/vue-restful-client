@@ -13,13 +13,17 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "animate-sass": "git+https://github.com/tgdev/animate-sass.git",
     "babel-runtime": "^6.0.0",
     "bootstrap-sass": "^3.3.7",
     "expose-loader": "^0.7.1",
     "flex-layout-attribute": "^1.0.3",
     "font-awesome": "^4.6.3",
     "jquery": "^3.1.0",
+    "lodash": "^4.15.0",
     "metismenu": "^2.5.2",
+    "moment": "^2.14.1",
+    "nprogress": "^0.2.0",
     "run-series": "^1.1.4",
     "vue": "^1.0.21",
     "vue-head": "^1.0.7",

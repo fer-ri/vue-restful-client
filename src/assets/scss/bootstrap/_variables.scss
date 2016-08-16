@@ -17,6 +17,20 @@ $color-background: #f1f3f6;
 $color-background-boxed: lighten($color-background, 3%);
 $border-color: #e4e5e7;
 
+// Brand
+$brand-primary:         $color-navy-blue !default; // #337ab7
+$brand-success:         $color-green !default;
+$brand-info:            $color-blue !default;
+$brand-warning:         $color-yellow !default;
+$brand-danger:          $color-red !default;
+
+
+// State
+$state-success-text: $color-green;
+$state-info-text: $color-blue;
+$state-warning-text: $color-yellow;
+$state-danger-text: $color-red;
+
 // Additional variables
 $menu-width: 220px;
 $main-transition: all 0.1s ease-out 0s;
@@ -26,7 +40,7 @@ $font-family-sans-serif: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-s
 $text-color: $color-text;
 
 $headings-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$headings-font-weight: 600;
+$headings-font-weight: 300;
 
 // Border
 $border-radius-base: 0;

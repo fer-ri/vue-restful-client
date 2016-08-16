@@ -15,7 +15,8 @@ module.exports = {
       'vue-resource',
       'vuex',
       'vuex-router-sync',
-      // 'vue-lazyload',
+      'moment',
+      'nprogress',
       'metismenu'
     ]
   },
