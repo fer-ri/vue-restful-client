@@ -64,6 +64,8 @@
 </style>
 
 <script>
+  import $ from 'jquery'
+  
   export default {
     data () {
       return {
@@ -83,6 +85,8 @@
         this.$auth.login(this.credentials, true, '/', {
           success (user) {
             $this.submitting = false
+
+            $('body').removeClass('auth-page')
 
             $this.$dispatch('app:success', 'Welcome back')
           },

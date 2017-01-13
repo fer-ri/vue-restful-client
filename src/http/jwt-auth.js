@@ -1,3 +1,5 @@
+import map from 'lodash/map'
+
 // fork from https://github.com/websanova/vue-jwt-auth
 module.exports = (function () {
   let _tokenRefreshTimeout = null
@@ -11,7 +13,7 @@ module.exports = (function () {
     if (auth && (auth === true || auth.constructor === Array)) {
       if (!this.check()) {
         this.$router.replace(this.getOption('authRedirect'))
-      } else if (auth.constructor === Array && !_compare(auth, _toArray(this.user()[this.getOption('rolesVar')]))) {
+      } else if (auth.constructor === Array && !_compare(auth, this.roleNames())) {
         this.$router.replace(this.getOption('forbiddenRedirect'))
       } else {
         return transition.next()
@@ -40,7 +42,6 @@ module.exports = (function () {
   }
 
   // Utils
-
   function _getUrl () {
     let port = window.location.port
 
@@ -406,11 +407,19 @@ module.exports = (function () {
         }
       },
 
+      roles () {
+        return this.data[this.getOption('rolesVar')].data
+      },
+
+      roleNames () {
+        return map(this.roles(), 'name')
+      },
+
       // User
       check (role) {
         if (this.data !== null) {
           if (role) {
-            return _compare(role, this.data[this.getOption('rolesVar')])
+            return _compare(role, this.roleNames())
           }
 
           return true

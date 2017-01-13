@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import VueHead from 'vue-head'
 import VueRouter from 'vue-router'
+import VueEvents from 'vue-events'
 import VueResource from 'vue-resource'
 import { sync } from 'vuex-router-sync'
 
@@ -14,6 +15,7 @@ import http from './http'
 config.transition()
 
 Vue.use(VueHead)
+Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
