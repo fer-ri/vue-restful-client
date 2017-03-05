@@ -20,10 +20,7 @@
 
 export default [
   {
-    link: {
-      path: '/',
-      exact: true
-    },
+    link: { path: '/', exact: true },
     label: 'Dashboard',
     before: '',
     after: '<span class="label label-success pull-right">start</span>'
@@ -35,10 +32,9 @@ export default [
     label: 'Post'
   },
   {
-    link: {
-      path: '/users'
-    },
-    label: 'User'
+    link: { path: '/users' },
+    label: 'User',
+    roles: 'admin'
   },
   {
     link: null,

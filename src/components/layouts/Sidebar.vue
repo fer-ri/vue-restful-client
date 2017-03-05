@@ -16,23 +16,24 @@
           //-     li
           //-       a(href='#') Example link
       ul#side-menu.nav
-        li(v-link-active, v-for="item in menu")
-          a(v-link="item.link", v-on:click="fixDropdown")
-            | {{{ item.before }}}
-            span.nav-label {{ item.label }}
-            | {{{ item.after }}}
-            
-            i.arrow.fa.fa-angle-right(v-if="hasChildren(item)")
+        template(v-for="item in menu")
+          li(v-link-active, v-if="check(item.roles)")
+            a(v-link="item.link", v-on:click="fixDropdown")
+              | {{{ item.before }}}
+              span.nav-label {{ item.label }}
+              | {{{ item.after }}}
+              
+              i.arrow.fa.fa-angle-right(v-if="hasChildren(item)")
 
-          ul.nav.nav-second-level(v-if="hasChildren(item)")
-            li(v-for="child in item.children")
-              a(v-link="child.link") 
-                | {{{ child.before }}}
-                | {{ child.label }}
-                | {{{ child.after }}}
-        li(v-link-active)
-          a(v-link="{ path: '/hello' }", v-on:click="fixDropdown")
-            span.nav-label Hello
+            ul.nav.nav-second-level(v-if="hasChildren(item)")
+              li(v-for="child in item.children")
+                a(v-link="child.link") 
+                  | {{{ child.before }}}
+                  | {{ child.label }}
+                  | {{{ child.after }}}
+          li(v-link-active)
+            a(v-link="{ path: '/hello' }", v-on:click="fixDropdown")
+              span.nav-label Hello
 </template>
 
 <style lang="sass" scoped>
@@ -128,6 +129,13 @@
       })
     },
     methods: {
+      check (roles) {
+        if (roles) {
+          return this.$auth.check(roles)
+        }
+
+        return true
+      },
       hasChildren (item) {
         return Array.isArray(item.children) && item.children.length > 0
       },
