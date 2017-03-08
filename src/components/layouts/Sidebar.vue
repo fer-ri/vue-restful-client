@@ -31,9 +31,10 @@
                   | {{{ child.before }}}
                   | {{ child.label }}
                   | {{{ child.after }}}
-          li(v-link-active)
-            a(v-link="{ path: '/hello' }", v-on:click="fixDropdown")
-              span.nav-label Hello
+
+        li(v-link-active)
+          a(v-link="{ path: '/hello' }", v-on:click="fixDropdown")
+            span.nav-label Hello
 </template>
 
 <style lang="sass" scoped>

@@ -1,30 +1,52 @@
-<template lang="jade">
-  .rest-table-wrapper(v-bind:class="wrapperClass")
-    table.table.rest-table(v-bind:class="tableClass")
-      thead
-        tr
-          template(v-for="field in fields")
-            th(id="_{{ field.name }}", v-bind:class="field.titleClass") 
-              | {{ field.title | capitalize }}
-      tbody(v-cloak)
-        template(v-for="(itemIndex, item) in items")
-          tr
-            template(v-for="field in fields")
-              template(v-if="isReservedField(field.name)")
-                template(v-if="field.name === '__actions'")
-                  td.rest-table-actions(v-bind:class="field.dataClass")
-                    template(v-for="action in field.callback")
-                      a(
-                        v-bind:class="action.elementClass",
-                        v-html="action.html"
-                        v-on:click="notify(action.event, item)"
-                      )
-                      span &nbsp;
-              template(v-else)
-                td(v-bind:class="field.dataClass")
-                  | {{{ renderField(item, field) }}}
+<template>
+  <div v-bind:class="wrapperClass" class="rest-table-wrapper">
+    <table v-bind:class="tableClass" class="table rest-table">
+      <thead>
+        <tr>
+          <template v-for="field in fields">
+            <th id="_{{ field.name }}" v-bind:class="field.titleClass">
+              <div v-if="field.sort" @click="sort(field.name)" class="column_sortable">
+                {{ field.title | capitalize }}
+                <template v-if="sortBy === field.name">
+                  <span class="fa fa-caret-down" v-if="sortAsc"></span>
+                  <span class="fa fa-caret-up" v-if="!sortAsc"></span>
+                </template>
+              </div>
 
-    pagination(:pagination="pagination", v-if="pagination")
+              <div v-else>
+                {{ field.title | capitalize }}
+              </div>
+            </th>
+          </template>
+        </tr>
+      </thead>
+      <tbody v-cloak="v-cloak">
+        <template v-for="(itemIndex, item) in items">
+          <tr>
+            <template v-for="field in fields">
+              <template v-if="isReservedField(field.name)">
+                <template v-if="field.name === '__actions'">
+                  <td v-bind:class="field.dataClass" class="rest-table-actions">
+                    <template v-for="action in field.callback">
+                      <a v-bind:class="action.elementClass" 
+                        v-html="action.html" 
+                        @click="notify(action.event, item)"
+                      ></a>
+                      <span>&nbsp;</span>
+                    </template>
+                  </td>
+                </template>
+              </template>
+              <template v-else>
+                <td v-bind:class="field.dataClass">{{{ renderField(item, field) }}}</td>
+              </template>
+            </template>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <pagination :pagination="pagination" v-if="pagination"></pagination>
+  </div>
 </template>
 
 <style lang="sass">
@@ -33,6 +55,9 @@
       width: 1px;
       text-align: right;
       white-space: nowrap;
+
+    .column_sortable
+      cursor: pointer;
 </style>
 
 <script>
@@ -98,10 +123,25 @@
       return {
         items: [],
         pagination: null,
-        slotElements: []
+        slotElements: [],
+        sortBy: null,
+        sortAsc: true
       }
     },
     ready () {
+      let sort = this.currentQuery.sort
+      if (typeof sort === 'string') {
+        let firstChar = sort.charAt(0)
+
+        this.sortAsc = firstChar !== '-'
+
+        if (firstChar === '-' || firstChar === '+') {
+          this.sortBy = sort.substring(1)
+        } else {
+          this.sortBy = sort
+        }
+      }
+
       this.getData()
     },
     computed: {
@@ -117,7 +157,7 @@
 
         for (let key in apiQuery) {
           if (typeof currentQuery[key] !== 'undefined') {
-            whitelist.page = currentQuery[key]
+            whitelist[key] = currentQuery[key]
           }
         }
 
@@ -170,6 +210,7 @@
               title: this.setTitle(field),
               titleClass: '',
               dataClass: '',
+              sort: false,
               callback: null,
               visible: true
             }
@@ -177,7 +218,7 @@
             parsed = {
               name: field.name,
               title: (field.title === undefined) ? this.setTitle(field.name) : field.title,
-              sortField: field.sortField,
+              sort: (field.sort === undefined) ? false : field.sort,
               titleClass: (field.titleClass === undefined) ? '' : field.titleClass,
               dataClass: (field.dataClass === undefined) ? '' : field.dataClass,
               callback: (field.callback === undefined) ? null : field.callback,
@@ -226,6 +267,21 @@
           }, error => {
             this.notify('error', error)
           })
+      },
+      sort (fieldName) {
+        this.sortAsc = this.sortBy === fieldName ? !this.sortAsc : true
+
+        this.sortBy = fieldName
+
+        let sortSign = this.sortAsc ? '+' : '-'
+
+        let query = Object.assign(this.currentQuery, {
+          sort: sortSign + this.sortBy
+        })
+
+        delete query.page
+
+        this.$router.go({ path: this.routePath, query: query })
       }
     },
     events: {

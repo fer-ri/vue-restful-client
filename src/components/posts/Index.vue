@@ -18,10 +18,9 @@
 
 <script>
   import crud from '../mixins/crud'
-  import notify from '../mixins/notify'
 
   export default {
-    mixins: [crud, notify],
+    mixins: [crud],
     data () {
       return {
         endPoint: 'posts',
@@ -29,14 +28,15 @@
           {
             name: 'title',
             title: 'Title',
-            sortField: 'title'
+            sort: true
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             title: 'Created At',
             titleClass: 'nowrap',
             dataClass: 'nowrap',
-            callback: 'formatDate|MMM D, Y'
+            callback: 'formatDate|MMM D, Y',
+            sort: true
           },
           {
             name: '__actions',
